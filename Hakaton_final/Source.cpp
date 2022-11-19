@@ -160,7 +160,7 @@ BotOperation::BotOperation(string new_way, ld new_time) {
 }
 
 void BotOperation::print_data() {
-    cout << way << " " << time << "\n";
+    cout << way << "\n" << time << "\n";
 }
 
 class Workspace {
