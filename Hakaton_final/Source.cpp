@@ -128,7 +128,5 @@ void Workspace::calculate_robot_floor() {
 
 int main() {
     fast_io;
-    Point p(1, 3);
-    Markers(p, p, p, p);
     return 0;
 }
