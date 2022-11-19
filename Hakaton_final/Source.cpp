@@ -249,7 +249,7 @@ public:
 };
 
 Work::Work() {
-    Workspace start();
+    Workspace start;
     BotOperation test_go("forward", 1);
     BotOperation test_back("back", 1);
     test_go.print_data();
