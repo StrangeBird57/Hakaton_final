@@ -14,22 +14,8 @@ ifstream cmd_file("abot/command.json", ifstream::binary);
 
 typedef long long ll;
 typedef long double ld;
-typedef unsigned long long ull;
-typedef pair <ll, ll> pll;
 typedef vector <ll> vec;
-typedef vector <pll> vecp;
-typedef vector <ld> vecd;
-typedef vector <vector <ll>> matrix;
 
-const ld PI = 3.141592653589793;
-const ld eps = 1e-9;
-const ll INF = 1e16;
-const ll MOD = 1e9 + 7;
-
-#define pb push_back
-#define mp make_pair
-#define all(v) v.begin(), v.end()
-#define fast_io ios::sync_with_stdio(false), cin.tie(0), cout.tie(0)
 #define fixed_out(x) fixed << setprecision(x)
 
 class Point {
@@ -172,6 +158,5 @@ void Workspace::calculate_targets_floor() {
 }
 
 int main() {
-    fast_io;
     return 0;
 }
