@@ -1,24 +1,11 @@
 #define _CRT_SECURE_NO_WARNINGS
 
-/*#pragma GCC optimize("Ofast")
-#pragma GCC optimize("unroll-loops")*/
-
 #include <iostream>
 #include <iomanip>
 #include <cmath>
 #include <algorithm>
 #include <string>
 #include <vector>
-#include <stack>
-#include <deque>
-#include <queue>
-#include <map>
-#include <set>
-#include <cstring>
-#include <cstdio>
-#include <climits>
-#include <unordered_map>
-#include <unordered_set>
 
 using namespace std;
 
@@ -44,15 +31,15 @@ const ll MOD = 1e9 + 7;
 
 class Point {
 private:
-    ll x, y;
+    ld x, y;
 public:
-    Point(ll new_x, ll new_y);
+    Point(ld new_x, ld new_y);
     Point operator=(Point p);
-    ll get_x();
-    ll get_y();
+    ld get_x();
+    ld get_y();
 };
 
-Point::Point(ll new_x, ll new_y) {
+Point::Point(ld new_x, ld new_y) {
     x = new_x;
     y = new_y;
 }
@@ -62,11 +49,11 @@ Point Point::operator=(Point p) {
     y = p.get_y();
 }
 
-ll Point::get_x() {
+ld Point::get_x() {
     return x;
 }
 
-ll Point::get_y() {
+ld Point::get_y() {
     return y;
 }
 
@@ -108,11 +95,26 @@ class Workspace {
 private:
     Markers markers_screen, markers_floor;
     Point robot_screen, robot_floor;
-    ld x_coefficient, y_coefficient;
+    ld x_coefficient_1, x_coefficient_2, y_coefficient_1, y_coefficient_2;
 public:
     Workspace();
+    void calculate_coefficiet();
+    void calculate_robot_floor();
 
 };
+
+void Workspace::calculate_coefficiet() {
+    x_coefficient_1 = markers_screen.get_marker_1().get_x() / markers_floor.get_marker_1().get_x();
+    x_coefficient_2 = markers_screen.get_marker_2().get_x() / markers_floor.get_marker_2().get_x();
+    y_coefficient_1 = markers_screen.get_marker_1().get_y() / markers_floor.get_marker_1().get_y();
+    y_coefficient_2 = markers_screen.get_marker_4().get_y() / markers_floor.get_marker_4().get_y();
+}
+
+void Workspace::calculate_robot_floor() {
+    ld robot_floor_x = 0, robot_floor_y = 0;
+
+    robot_floor = { robot_floor_x, robot_floor_y };
+}
 
 int main() {
     fast_io;
