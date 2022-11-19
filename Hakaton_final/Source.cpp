@@ -58,9 +58,8 @@ private:
     double a, b, c;
 public:
     Line(Point p1, Point p2);
-    Point get_point1();
-    Point get_point2();
-    pair<int, int> normal();
+    ld get_a();
+    ld get_b();
 };
 
 Line::Line(Point p1, Point p2) {
@@ -69,13 +68,19 @@ Line::Line(Point p1, Point p2) {
     c = -(a * p1.get_x() + b * p1.get_y());
 }
 
-pair<int, int> Line::normal(){
-    return {a, b};
+ld Line::get_a() {
+    return a;
+}
+
+ld Line::get_b() {
+    return b;
 }
 
 double angle(Line l1, Line l2){
-    auto [a1, a2] = l1.normal();
-    auto [b1, b2] = l2.normal();
+    ld a1 = l1.get_a();
+    ld a2 = l2.get_a();
+    ld b1 = l1.get_b();
+    ld b2 = l2.get_b();
     return acos((a1 * b1 + a2 * b2) / ((hypot(a1, a2) * hypot(b1, b2))));
 }
 
@@ -263,13 +268,15 @@ void Work::process() {
         //rotate.print_data();
         //move.print_data();
         //back.print_data();
+    }
+}
 
 class InputHandler {
 public:
     InputHandler();
 };
 
-InputHandler::InputHandler(){
+InputHandler::InputHandler() {
     Json::Value cmd;
     cmd_file >> cmd;
     if (cmd["cmd"] == "left") {
@@ -295,7 +302,7 @@ InputHandler::InputHandler(){
         cout << "rabota" << endl; // debug
         Workspace w(cmd);
     }
-}
+};
 
 int main() {
     return 0;
