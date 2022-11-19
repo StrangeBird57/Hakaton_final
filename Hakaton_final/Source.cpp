@@ -53,6 +53,32 @@ ld Point::get_y() {
     return y;
 }
 
+class Line {
+private:
+    double a, b, c;
+public:
+    Line(Point p1, Point p2);
+    Point get_point1();
+    Point get_point2();
+    pair<int, int> normal();
+};
+
+Line::Line(Point p1, Point p2) {
+    a = p1.get_y() - p2.get_y();
+    b = p2.get_x() - p1.get_x();
+    c = -(a * p1.get_x() + b * p1.get_y());
+}
+
+pair<int, int> Line::normal(){
+    return {a, b};
+}
+
+double angle(Line l1, Line l2){
+    auto [a1, a2] = l1.normal();
+    auto [b1, b2] = l2.normal();
+    return acos((a1 * b1 + a2 * b2) / ((hypot(a1, a2) * hypot(b1, b2))));
+}
+
 class Markers {
 private:
     Point marker_1, marker_2, marker_3, marker_4;
@@ -196,6 +222,5 @@ InputHandler::InputHandler(){
 }
 
 int main() {
-    InputHandler();
     return 0;
 }
