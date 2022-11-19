@@ -128,7 +128,7 @@ void Workspace::calculate_robot_floor() {
     robot_floor = tmp;
 }
 
-void Workspace::calculate_robot_floor() {
+void Workspace::calculate_targets_floor() {
     targets_floor.resize(targets_screen.size());
     for (int i = 0; i < targets_screen.size(); ++i) {
         ld target_floor_x = robot_screen.get_x() * (x_coefficient_1 + x_coefficient_2) * dist_coefficient_x;
