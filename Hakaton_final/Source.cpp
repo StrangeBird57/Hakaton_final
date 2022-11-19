@@ -145,7 +145,7 @@ private:
     ld time;
 public:
     BotOperation();
-    BotOperation(string new_way, ld new_time = 0);
+    BotOperation(string new_way, ld new_time);
     void print_data();
 };
 
@@ -154,7 +154,7 @@ BotOperation::BotOperation() {
     time = 0;
 }
 
-BotOperation::BotOperation(string new_way, ld new_time = 0) {
+BotOperation::BotOperation(string new_way, ld new_time) {
     way = new_way;
     time = new_time;
 }
