@@ -122,7 +122,8 @@ void Workspace::calculate_robot_floor() {
     ld dist_coefficient_y = (robot_screen.get_y() - markers_screen.get_marker_1().get_y()) / (markers_screen.get_marker_4().get_y() - markers_screen.get_marker_1().get_y());
     ld robot_floor_x = robot_screen.get_x() * (x_coefficient_1 + x_coefficient_2) * dist_coefficient_x;
     ld robot_floor_y = robot_screen.get_y() * (y_coefficient_1 + y_coefficient_2) * dist_coefficient_y;
-    robot_floor = { robot_floor_x, robot_floor_y };
+    Point tmp(robot_floor_x, robot_floor_y);
+    robot_floor = tmp;
 }
 
 int main() {
