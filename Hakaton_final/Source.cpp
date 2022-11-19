@@ -244,12 +244,12 @@ private:
     Point robot_start, robot_test;
     vector <Point> targets;
 public:
-    Work(Json::Value data);
+    Work();
     void process();
 };
 
-Work::Work(Json::Value data, bool fl=0) {
-    Workspace start(data);
+Work::Work() {
+    Workspace start();
     BotOperation test_go("forward", 1);
     BotOperation test_back("back", 1);
     test_go.print_data();
