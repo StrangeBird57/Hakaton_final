@@ -53,6 +53,32 @@ ld Point::get_y() {
     return y;
 }
 
+class Line {
+private:
+    double a, b, c;
+public:
+    Line(Point p1, Point p2);
+    Point get_point1();
+    Point get_point2();
+    pair<int, int> normal();
+};
+
+Line::Line(Point p1, Point p2) {
+    a = p1.get_y() - p2.get_y();
+    b = p2.get_x() - p1.get_x();
+    c = -(a * p1.get_x() + b * p1.get_y());
+}
+
+pair<int, int> Line::normal(){
+    return {a, b};
+}
+
+double angle(Line l1, Line l2){
+    auto [a1, a2] = l1.normal();
+    auto [b1, b2] = l2.normal();
+    return acos((a1 * b1 + a2 * b2) / ((hypot(a1, a2) * hypot(b1, b2))));
+}
+
 class Markers {
 private:
     Point marker_1, marker_2, marker_3, marker_4;
@@ -122,13 +148,15 @@ void BotOperation::print_data() {
 
 class Workspace {
 private:
+    Json::Value cmd;
     Markers markers_screen, markers_floor;
     Point robot_screen, robot_floor;
     ld x_coefficient_1, x_coefficient_2, y_coefficient_1, y_coefficient_2;
     ld dist_coefficient_x, dist_coefficient_y;
     vector <Point> targets_screen, targets_floor;
 public:
-    Workspace();
+    Workspace() {}
+    Workspace(Json::Value);
     void calculate_coefficiet();
     void calculate_robot_floor();
     void calculate_targets_floor();
@@ -136,9 +164,9 @@ public:
     vector <Point> get_targets();
 };
 
-Workspace::Workspace(){
-    Json::Value cmd;
-    cmd_file >> cmd;
+Workspace::Workspace(Json::Value file){
+    cmd = file;
+    cout << stold(cmd["markers_screen"][0]["x"].asString()) << endl;
     markers_screen = Markers(
         Point(stold(cmd["markers_screen"][0]["x"].asString()), stold(cmd["markers_screen"][0]["y"].asString())),
         Point(stold(cmd["markers_screen"][1]["x"].asString()), stold(cmd["markers_screen"][1]["y"].asString())),
@@ -235,6 +263,37 @@ void Work::process() {
         //rotate.print_data();
         //move.print_data();
         //back.print_data();
+
+class InputHandler {
+public:
+    InputHandler();
+};
+
+InputHandler::InputHandler(){
+    Json::Value cmd;
+    cmd_file >> cmd;
+    if (cmd["cmd"] == "left") {
+        cout << "levo" << endl; // debug
+        ld val = stold(cmd["val"].asString());
+    }
+    if (cmd["cmd"] == "right") {
+        cout << "pravo" << endl; // debug
+        ld val = stold(cmd["val"].asString());
+    }
+    if (cmd["cmd"] == "forward") {
+        cout << "vpered" << endl; // debug
+        ld val = stold(cmd["val"].asString());
+    }
+    if (cmd["cmd"] == "back") {
+        cout << "zad" << endl; // debug
+        ld val = stold(cmd["val"].asString());
+    }
+    if (cmd["cmd"] == "stop") {
+        cout << "hare" << endl; // debug
+    }
+    if (cmd["cmd"] == "auto") {
+        cout << "rabota" << endl; // debug
+        Workspace w(cmd);
     }
 }
 
