@@ -76,12 +76,24 @@ ld Line::get_b() {
     return b;
 }
 
-double angle(Line l1, Line l2){
+ld get_angle(Line l1, Line l2){
     ld a1 = l1.get_a();
     ld a2 = l2.get_a();
     ld b1 = l1.get_b();
     ld b2 = l2.get_b();
     return acos((a1 * b1 + a2 * b2) / ((hypot(a1, a2) * hypot(b1, b2))));
+}
+
+ld get_dist(Point a, Point b) {
+    return pow((a.get_x() - b.get_x()), 2) + pow((a.get_y() - b.get_y()), 2);
+}
+
+ld calculate_time_by_angle(ld angle) {
+    return 1;
+}
+
+ld calculate_time_by_dist(ld dist) {
+    return 1;
 }
 
 class Markers {
@@ -249,25 +261,25 @@ Work::Work() {
 }
 
 void Work::process() {
-    //Line first(robot_start, robot_test), second(robot_start, targets[0]);
-    //ld angle = get_angle(first, second);
-    //ld get_dist(robot_start, targets[0])
-    //ld time_rotate = calculate_time_by_angle(angle);
-    //ld time_move = calculate_time_by_dist(dist);
-    //BotOperation rotate("left", time_rotate), move("forward", time_move), back("back", time_move);
-    //rotate.print_data();
-    //move.print_data();
-    //back.print_data();
+    Line first(robot_start, robot_test), second(robot_start, targets[0]);
+    ld angle = get_angle(first, second);
+    ld dist = get_dist(robot_start, targets[0]);
+    ld time_rotate = calculate_time_by_angle(angle);
+    ld time_move = calculate_time_by_dist(dist);
+    BotOperation rotate("left", time_rotate), move("forward", time_move), back("back", time_move);
+    rotate.print_data();
+    move.print_data();
+    back.print_data();
     for (int i = 1; i < targets.size(); ++i) {
-        //Line first(robot_start, targets[i - 1]), second(robot_start, targets[i]);
-        //ld angle = get_angle(first, second);
-        //ld get_dist(robot_start, targets[i])
-        //ld time_rotate = calculate_time_by_angle(angle);
-        //ld time_move = calculate_time_by_dist(dist);
-        //BotOperation rotate("left", time_rotate), move("forward", time_move), back("back", time_move);
-        //rotate.print_data();
-        //move.print_data();
-        //back.print_data();
+        Line first(robot_start, targets[i - 1]), second(robot_start, targets[i]);
+        ld angle = get_angle(first, second);
+        ld dist = get_dist(robot_start, targets[i]);
+        ld time_rotate = calculate_time_by_angle(angle);
+        ld time_move = calculate_time_by_dist(dist);
+        BotOperation rotate("left", time_rotate), move("forward", time_move), back("back", time_move);
+        rotate.print_data();
+        move.print_data();
+        back.print_data();
     }
 }
 
