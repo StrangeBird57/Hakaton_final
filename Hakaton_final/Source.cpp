@@ -222,6 +222,9 @@ void Work::process() {
     //ld time_rotate = calculate_time_by_angle(angle);
     //ld time_move = calculate_time_by_dist(dist);
     //BotOperation rotate("left", time_rotate), move("forward", time_move), back("back", time_move);
+    //rotate.print_data();
+    //move.print_data();
+    //back.print_data();
     for (int i = 1; i < targets.size(); ++i) {
         //Line first(robot_start, targets[i - 1]), second(robot_start, targets[i]);
         //ld angle = get_angle(first, second);
@@ -229,6 +232,9 @@ void Work::process() {
         //ld time_rotate = calculate_time_by_angle(angle);
         //ld time_move = calculate_time_by_dist(dist);
         //BotOperation rotate("left", time_rotate), move("forward", time_move), back("back", time_move);
+        //rotate.print_data();
+        //move.print_data();
+        //back.print_data();
     }
 }
 
