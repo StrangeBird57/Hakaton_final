@@ -33,11 +33,17 @@ class Point {
 private:
     ld x, y;
 public:
+    Point();
     Point(ld new_x, ld new_y);
     Point operator=(Point p);
     ld get_x();
     ld get_y();
 };
+
+Point::Point() {
+    x = 0;
+    y = 0;
+}
 
 Point::Point(ld new_x, ld new_y) {
     x = new_x;
@@ -47,6 +53,7 @@ Point::Point(ld new_x, ld new_y) {
 Point Point::operator=(Point p) {
     x = p.get_x();
     y = p.get_y();
+    return *this;
 }
 
 ld Point::get_x() {
@@ -111,13 +118,16 @@ void Workspace::calculate_coefficiet() {
 }
 
 void Workspace::calculate_robot_floor() {
-    ld robot_floor_x = 0, robot_floor_y = 0;
-
+    ld dist_coefficient_x = (robot_screen.get_x() - markers_screen.get_marker_1().get_x()) / (markers_screen.get_marker_2().get_x() - markers_screen.get_marker_1().get_x());
+    ld dist_coefficient_y = (robot_screen.get_y() - markers_screen.get_marker_1().get_y()) / (markers_screen.get_marker_4().get_y() - markers_screen.get_marker_1().get_y());
+    ld robot_floor_x = robot_screen.get_x() * (x_coefficient_1 + x_coefficient_2) * dist_coefficient_x;
+    ld robot_floor_y = robot_screen.get_y() * (y_coefficient_1 + y_coefficient_2) * dist_coefficient_y;
     robot_floor = { robot_floor_x, robot_floor_y };
 }
 
 int main() {
     fast_io;
-
+    Point p(1, 3);
+    Markers(p, p, p, p);
     return 0;
 }
