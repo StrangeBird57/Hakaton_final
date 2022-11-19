@@ -103,11 +103,13 @@ private:
     Markers markers_screen, markers_floor;
     Point robot_screen, robot_floor;
     ld x_coefficient_1, x_coefficient_2, y_coefficient_1, y_coefficient_2;
+    ld dist_coefficient_x, dist_coefficient_y;
+    vector <Point> targets_screen, targets_floor;
 public:
     Workspace();
     void calculate_coefficiet();
     void calculate_robot_floor();
-
+    void calculate_targets_floor();
 };
 
 void Workspace::calculate_coefficiet() {
@@ -115,15 +117,25 @@ void Workspace::calculate_coefficiet() {
     x_coefficient_2 = markers_screen.get_marker_2().get_x() / markers_floor.get_marker_2().get_x();
     y_coefficient_1 = markers_screen.get_marker_1().get_y() / markers_floor.get_marker_1().get_y();
     y_coefficient_2 = markers_screen.get_marker_4().get_y() / markers_floor.get_marker_4().get_y();
+    dist_coefficient_x = (robot_screen.get_x() - markers_screen.get_marker_1().get_x()) / (markers_screen.get_marker_2().get_x() - markers_screen.get_marker_1().get_x());
+    dist_coefficient_y = (robot_screen.get_y() - markers_screen.get_marker_1().get_y()) / (markers_screen.get_marker_4().get_y() - markers_screen.get_marker_1().get_y());
 }
 
 void Workspace::calculate_robot_floor() {
-    ld dist_coefficient_x = (robot_screen.get_x() - markers_screen.get_marker_1().get_x()) / (markers_screen.get_marker_2().get_x() - markers_screen.get_marker_1().get_x());
-    ld dist_coefficient_y = (robot_screen.get_y() - markers_screen.get_marker_1().get_y()) / (markers_screen.get_marker_4().get_y() - markers_screen.get_marker_1().get_y());
     ld robot_floor_x = robot_screen.get_x() * (x_coefficient_1 + x_coefficient_2) * dist_coefficient_x;
     ld robot_floor_y = robot_screen.get_y() * (y_coefficient_1 + y_coefficient_2) * dist_coefficient_y;
     Point tmp(robot_floor_x, robot_floor_y);
     robot_floor = tmp;
+}
+
+void Workspace::calculate_robot_floor() {
+    targets_floor.resize(targets_screen.size());
+    for (int i = 0; i < targets_screen.size(); ++i) {
+        ld target_floor_x = robot_screen.get_x() * (x_coefficient_1 + x_coefficient_2) * dist_coefficient_x;
+        ld target_floor_y = robot_screen.get_y() * (y_coefficient_1 + y_coefficient_2) * dist_coefficient_y;
+        Point target_floor(target_floor_x, target_floor_y);
+        targets_floor[i] = target_floor;
+    }
 }
 
 int main() {
