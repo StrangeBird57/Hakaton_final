@@ -283,12 +283,7 @@ void Work::process() {
     }
 }
 
-class InputHandler {
-public:
-    InputHandler();
-};
-
-InputHandler::InputHandler() {
+void InputHandler() {
     Json::Value cmd;
     cmd_file >> cmd;
     bool fl = 0;
@@ -322,5 +317,6 @@ InputHandler::InputHandler() {
 };
 
 int main() {
+    InputHandler();
     return 0;
 }
