@@ -1,6 +1,8 @@
 #define _CRT_SECURE_NO_WARNINGS
 
 #include <iostream>
+#include <fstream>
+#include <json/json.h>
 #include <iomanip>
 #include <cmath>
 #include <algorithm>
@@ -8,6 +10,7 @@
 #include <vector>
 
 using namespace std;
+ifstream cmd_file("abot/command.json", ifstream::binary);
 
 typedef long long ll;
 typedef long double ld;
@@ -68,12 +71,21 @@ class Markers {
 private:
     Point marker_1, marker_2, marker_3, marker_4;
 public:
+    Markers();
     Markers(Point new_marker_1, Point new_marker_2, Point new_marker_3, Point new_marker_4);
     Point get_marker_1();
     Point get_marker_2();
     Point get_marker_3();
     Point get_marker_4();
 };
+
+Markers::Markers(){
+    Point p(0, 0);
+    marker_1 = p;
+    marker_2 = p;
+    marker_3 = p;
+    marker_4 = p;
+}
 
 Markers::Markers(Point new_marker_1, Point new_marker_2, Point new_marker_3, Point new_marker_4) {
     marker_1 = new_marker_1;
@@ -111,6 +123,27 @@ public:
     void calculate_robot_floor();
     void calculate_targets_floor();
 };
+
+Workspace::Workspace(){
+    Json::Value cmd;
+    cmd_file >> cmd;
+
+    markers_screen = Markers(
+        Point(stold(cmd["markers_screen"][0]["x"].asString()), stold(cmd["markers_screen"][0]["y"].asString())),
+        Point(stold(cmd["markers_screen"][1]["x"].asString()), stold(cmd["markers_screen"][0]["y"].asString())),
+        Point(stold(cmd["markers_screen"][2]["x"].asString()), stold(cmd["markers_screen"][0]["y"].asString())),
+        Point(stold(cmd["markers_screen"][3]["x"].asString()), stold(cmd["markers_screen"][0]["y"].asString()))
+    );
+
+    markers_floor = Markers(
+        Point(stold(cmd["markers_floor"][0]["x"].asString()), stold(cmd["markers_floor"][0]["y"].asString())),
+        Point(stold(cmd["markers_floor"][1]["x"].asString()), stold(cmd["markers_floor"][0]["y"].asString())),
+        Point(stold(cmd["markers_floor"][2]["x"].asString()), stold(cmd["markers_floor"][0]["y"].asString())),
+        Point(stold(cmd["markers_floor"][3]["x"].asString()), stold(cmd["markers_floor"][0]["y"].asString()))
+    );
+
+    robot_screen = Point(stold(cmd["robot_screen"]["x"].asString()), stold(cmd["robot_screen"]["x"].asString()));
+}
 
 void Workspace::calculate_coefficiet() {
     x_coefficient_1 = markers_screen.get_marker_1().get_x() / markers_floor.get_marker_1().get_x();
