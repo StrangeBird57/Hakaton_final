@@ -294,26 +294,26 @@ InputHandler::InputHandler() {
     bool fl = 0;
     if (cmd["cmd"] == "left") {
         ld val = stold(cmd["val"].asString());
-        Bot_operation bot("left", val);
+        BotOperation bot("left", val);
         bot.print_data();   
     }
     if (cmd["cmd"] == "right") {
         ld val = stold(cmd["val"].asString());
-        Bot_operation bot("right", val);
+        BotOperation bot("right", val);
         bot.print_data();   
     }
     if (cmd["cmd"] == "forward") {
         ld val = stold(cmd["val"].asString());
-        Bot_operation bot("forward", val);
+        BotOperation bot("forward", val);
         bot.print_data();   
     }
     if (cmd["cmd"] == "back") {
         ld val = stold(cmd["val"].asString());
-        Bot_operation bot("back", val);
+        BotOperation bot("back", val);
         bot.print_data();   
     }
     if (cmd["cmd"] == "stop") {
-        Bot_operation bot;
+        BotOperation bot;
         bot.print_data();
     }
     if (cmd["cmd"] == "auto") {
