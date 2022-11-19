@@ -227,12 +227,12 @@ private:
     Point robot_start, robot_test;
     vector <Point> targets;
 public:
-    Work();
+    Work(Json::Value data);
     void process();
 };
 
-Work::Work() {
-    Workspace start;
+Work::Work(Json::Value data, bool fl=0) {
+    Workspace start(data);
     BotOperation test_go("forward", 1);
     BotOperation test_back("back", 1);
     test_go.print_data();
@@ -272,28 +272,28 @@ public:
 InputHandler::InputHandler(){
     Json::Value cmd;
     cmd_file >> cmd;
+    bool fl = 0;
     if (cmd["cmd"] == "left") {
-        cout << "levo" << endl; // debug
         ld val = stold(cmd["val"].asString());
+        Bot_operation("left", val);
     }
     if (cmd["cmd"] == "right") {
-        cout << "pravo" << endl; // debug
         ld val = stold(cmd["val"].asString());
+        Bot_operation("right", val);
     }
     if (cmd["cmd"] == "forward") {
-        cout << "vpered" << endl; // debug
         ld val = stold(cmd["val"].asString());
+        Bot_operation("forward", val);
     }
     if (cmd["cmd"] == "back") {
-        cout << "zad" << endl; // debug
         ld val = stold(cmd["val"].asString());
+        Bot_operation("back", val);
     }
     if (cmd["cmd"] == "stop") {
-        cout << "hare" << endl; // debug
+        Bot_operation;
     }
     if (cmd["cmd"] == "auto") {
-        cout << "rabota" << endl; // debug
-        Workspace w(cmd);
+        if (fl) Work w(cmd);
     }
 }
 
