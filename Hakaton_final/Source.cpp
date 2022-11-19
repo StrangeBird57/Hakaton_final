@@ -283,37 +283,68 @@ void Work::process() {
     }
 }
 
-void InputHandler() {
-    Json::Value cmd;
-    cmd_file >> cmd;
+pair<string, ld> temp_parser(string s){
     bool fl = 0;
-    if (cmd["cmd"] == "left") {
-        ld val = stold(cmd["val"].asString());
-        BotOperation bot("left", val);
-        bot.print_data();   
+    vector<string> t;
+    string cmd = "";
+    for (int i = 0; i < s.size(); ++i){
+        if (fl == 0) {
+            if (s[i] == ':') {
+                fl = 1;
+                i += 2;
+            }
+        }
+        else if (fl == 1) {
+            if (s[i] != 34) {cmd += s[i];}
+            else {
+                fl = 0;
+                t.push_back(cmd);
+                cmd = "";
+            }
+        }
     }
-    if (cmd["cmd"] == "right") {
-        ld val = stold(cmd["val"].asString());
-        BotOperation bot("right", val);
-        bot.print_data();   
+    if (t.size() == 1) {
+        return {"stop", 0};
+    } else {
+        return {t[0], stold(t[1])};
     }
-    if (cmd["cmd"] == "forward") {
-        ld val = stold(cmd["val"].asString());
-        BotOperation bot("forward", val);
-        bot.print_data();   
-    }
-    if (cmd["cmd"] == "back") {
-        ld val = stold(cmd["val"].asString());
-        BotOperation bot("back", val);
-        bot.print_data();   
-    }
-    if (cmd["cmd"] == "stop") {
-        BotOperation bot;
-        bot.print_data();
-    }
-    if (cmd["cmd"] == "auto") {
-        // WIP
-    }
+}
+
+void InputHandler(string s) {
+    // Json::Value cmd;
+    // cmd_file >> cmd;
+    pair<string, ld> p = temp_parser(s);
+    BotOperation bot(p.first, stold(p.second));
+    bot.print_data();
+    // cout << p.first << " " << p.second << endl;
+    // bool fl = 0;
+    // if (cmd["cmd"] == "left") {
+    //     ld val = stold(cmd["val"].asString());
+    //     BotOperation bot("left", val);
+    //     bot.print_data();   
+    // }
+    // if (cmd["cmd"] == "right") {
+    //     ld val = stold(cmd["val"].asString());
+    //     BotOperation bot("right", val);
+    //     bot.print_data();   
+    // }
+    // if (cmd["cmd"] == "forward") {
+    //     ld val = stold(cmd["val"].asString());
+    //     BotOperation bot("forward", val);
+    //     bot.print_data();   
+    // }
+    // if (cmd["cmd"] == "back") {
+    //     ld val = stold(cmd["val"].asString());
+    //     BotOperation bot("back", val);
+    //     bot.print_data();   
+    // }
+    // if (cmd["cmd"] == "stop") {
+    //     BotOperation bot;
+    //     bot.print_data();
+    // }
+    // if (cmd["cmd"] == "auto") {
+    //     // WIP
+    // }
 };
 
 int main() {
