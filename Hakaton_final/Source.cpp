@@ -1,26 +1,16 @@
 #define _CRT_SECURE_NO_WARNINGS
 
-/*#pragma GCC optimize("Ofast")
-#pragma GCC optimize("unroll-loops")*/
-
 #include <iostream>
+#include <fstream>
+#include <json/json.h>
 #include <iomanip>
 #include <cmath>
 #include <algorithm>
 #include <string>
 #include <vector>
-#include <stack>
-#include <deque>
-#include <queue>
-#include <map>
-#include <set>
-#include <cstring>
-#include <cstdio>
-#include <climits>
-#include <unordered_map>
-#include <unordered_set>
 
 using namespace std;
+ifstream cmd_file("abot/command.json", ifstream::binary);
 
 typedef long long ll;
 typedef long double ld;
@@ -44,15 +34,21 @@ const ll MOD = 1e9 + 7;
 
 class Point {
 private:
-    ll x, y;
+    ld x, y;
 public:
-    Point(ll new_x, ll new_y);
+    Point();
+    Point(ld new_x, ld new_y);
     Point operator=(Point p);
-    ll get_x();
-    ll get_y();
+    ld get_x();
+    ld get_y();
 };
 
-Point::Point(ll new_x, ll new_y) {
+Point::Point() {
+    x = 0;
+    y = 0;
+}
+
+Point::Point(ld new_x, ld new_y) {
     x = new_x;
     y = new_y;
 }
@@ -60,13 +56,14 @@ Point::Point(ll new_x, ll new_y) {
 Point Point::operator=(Point p) {
     x = p.get_x();
     y = p.get_y();
+    return *this;
 }
 
-ll Point::get_x() {
+ld Point::get_x() {
     return x;
 }
 
-ll Point::get_y() {
+ld Point::get_y() {
     return y;
 }
 
@@ -74,12 +71,21 @@ class Markers {
 private:
     Point marker_1, marker_2, marker_3, marker_4;
 public:
+    Markers();
     Markers(Point new_marker_1, Point new_marker_2, Point new_marker_3, Point new_marker_4);
     Point get_marker_1();
     Point get_marker_2();
     Point get_marker_3();
     Point get_marker_4();
 };
+
+Markers::Markers(){
+    Point p(0, 0);
+    marker_1 = p;
+    marker_2 = p;
+    marker_3 = p;
+    marker_4 = p;
+}
 
 Markers::Markers(Point new_marker_1, Point new_marker_2, Point new_marker_3, Point new_marker_4) {
     marker_1 = new_marker_1;
@@ -108,11 +114,47 @@ class Workspace {
 private:
     Markers markers_screen, markers_floor;
     Point robot_screen, robot_floor;
-    ld x_coefficient, y_coefficient;
+    ld x_coefficient_1, x_coefficient_2, y_coefficient_1, y_coefficient_2;
 public:
     Workspace();
+    void calculate_coefficiet();
+    void calculate_robot_floor();
 
 };
+
+Workspace::Workspace(){
+    Json::Value cmd;
+    cmd_file >> cmd;
+
+    markers_screen = Markers(
+        Point(stold(cmd["markers_screen"][0]["x"].asString()), stold(cmd["markers_screen"][0]["y"].asString())),
+        Point(stold(cmd["markers_screen"][1]["x"].asString()), stold(cmd["markers_screen"][0]["y"].asString())),
+        Point(stold(cmd["markers_screen"][2]["x"].asString()), stold(cmd["markers_screen"][0]["y"].asString())),
+        Point(stold(cmd["markers_screen"][3]["x"].asString()), stold(cmd["markers_screen"][0]["y"].asString()))
+    );
+
+    markers_floor = Markers(
+        Point(stold(cmd["markers_floor"][0]["x"].asString()), stold(cmd["markers_floor"][0]["y"].asString())),
+        Point(stold(cmd["markers_floor"][1]["x"].asString()), stold(cmd["markers_floor"][0]["y"].asString())),
+        Point(stold(cmd["markers_floor"][2]["x"].asString()), stold(cmd["markers_floor"][0]["y"].asString())),
+        Point(stold(cmd["markers_floor"][3]["x"].asString()), stold(cmd["markers_floor"][0]["y"].asString()))
+    );
+
+    robot_screen = Point(stold(cmd["robot_screen"]["x"].asString()), stold(cmd["robot_screen"]["x"].asString()));
+}
+
+void Workspace::calculate_coefficiet() {
+    x_coefficient_1 = markers_screen.get_marker_1().get_x() / markers_floor.get_marker_1().get_x();
+    x_coefficient_2 = markers_screen.get_marker_2().get_x() / markers_floor.get_marker_2().get_x();
+    y_coefficient_1 = markers_screen.get_marker_1().get_y() / markers_floor.get_marker_1().get_y();
+    y_coefficient_2 = markers_screen.get_marker_4().get_y() / markers_floor.get_marker_4().get_y();
+}
+
+void Workspace::calculate_robot_floor() {
+    ld robot_floor_x = 0, robot_floor_y = 0;
+
+    robot_floor = { robot_floor_x, robot_floor_y };
+}
 
 int main() {
     fast_io;
