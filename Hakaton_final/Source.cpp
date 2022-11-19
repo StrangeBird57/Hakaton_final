@@ -128,7 +128,7 @@ Workspace::Workspace(){
     );
 
     for (auto elem : cmd["targets_screen"]){
-        targets_screen.pb(Point(stod(elem["x"].asString()), stod(elem["y"].asString())));
+        targets_screen.push_back(Point(stod(elem["x"].asString()), stod(elem["y"].asString())));
     }
 
     robot_screen = Point(stold(cmd["robot_screen"][0]["x"].asString()), stold(cmd["robot_screen"][0]["y"].asString()));
