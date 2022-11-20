@@ -280,14 +280,14 @@ vector <BotOperation> Work::get_commands(Point start, Point finish, Point direct
 }
 
 void Work::process() {
-    vector <BotOperation> comands = get_commands(robot_start, targets[0], robot_test);
-    for (int id = 0; id < comands.size(); ++id) {
-        comands[id].print_data();
+    vector <BotOperation> commands = get_commands(robot_start, targets[0], robot_test);
+    for (int id = 0; id < commands.size(); ++id) {
+        commands[id].print_data();
     }
     for (int i = 1; i < targets.size(); ++i) {
-        vector <BotOperation> comands = get_commands(robot_start, targets[i], targets[i - 1]);
-        for (int id = 0; id < comands.size(); ++id) {
-            comands[id].print_data();
+        commands = get_commands(robot_start, targets[i], targets[i - 1]);
+        for (int id = 0; id < commands.size(); ++id) {
+            commands[id].print_data();
         }
     }
 }
