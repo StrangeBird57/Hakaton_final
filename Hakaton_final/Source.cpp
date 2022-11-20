@@ -10,7 +10,6 @@
 #include <vector>
 
 using namespace std;
-ifstream cmd_file("abot/command.json", ifstream::binary);
 
 typedef long long ll;
 typedef long double ld;
