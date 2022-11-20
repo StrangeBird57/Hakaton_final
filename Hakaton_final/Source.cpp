@@ -160,7 +160,12 @@ BotOperation::BotOperation(string new_way, ld new_time) {
 }
 
 void BotOperation::print_data() {
-    cout << way << "\n" << time << "\n";
+    if (way == "stop") {
+        cout << way << "\n";
+    }
+    else {
+        cout << way << "\n" << time << "\n";
+    }
 }
 
 class Workspace {
