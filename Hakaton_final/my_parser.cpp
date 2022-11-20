@@ -243,6 +243,8 @@ void JsonHandler::input_handler(string s) {
     // }
 };
 
+JsonHandler json;
+
 class Workspace {
 private:
     Json::Value cmd;
@@ -253,7 +255,6 @@ private:
     vector <Point> targets_screen, targets_floor;
 public:
     Workspace() {}
-    Workspace(Json::Value);
     void calculate_coefficiet();
     void calculate_robot_floor();
     void calculate_targets_floor();
@@ -261,7 +262,8 @@ public:
     vector <Point> get_targets();
 };
 
-Workspace::Workspace(Json::Value file) {
+Workspace::Workspace() {
+    Json::Value file = json.get_json();
     cmd = file;
     cout << stold(cmd["markers_screen"][0]["x"].asString()) << endl;
     markers_screen = Markers(
