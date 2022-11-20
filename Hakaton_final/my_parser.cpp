@@ -213,34 +213,42 @@ void JsonHandler::input_handler(string s) {
         cout << errors << endl;
         return;
     }
-
-    if (cmd["cmd"] == "left") {
-        ld val = stold(cmd["val"].asString());
-        BotOperation bot("left", val);
-        bot.send_command();   
+    if (!fl) {
+        if (cmd["cmd"] == "left") {
+            ld val = stold(cmd["val"].asString());
+            BotOperation bot("left", val);
+            bot.send_command();   
+        }
+        if (cmd["cmd"] == "right") {
+            ld val = stold(cmd["val"].asString());
+            BotOperation bot("right", val);
+            bot.send_command();   
+        }
+        if (cmd["cmd"] == "forward") {
+            ld val = stold(cmd["val"].asString());
+            BotOperation bot("forward", val);
+            bot.send_command();   
+        }
+        if (cmd["cmd"] == "back") {
+            ld val = stold(cmd["val"].asString());
+            BotOperation bot("back", val);
+            bot.send_command();   
+        }
+        if (cmd["cmd"] == "stop") {
+            BotOperation bot;
+            bot.send_command();
+        }
+        if (cmd["cmd"] == "auto") {
+            fl = 1;
+            Work w;
+        }
+    } else {
+        if (cmd["cmd"] == "auto") {
+            json = cmd;
+        } else {
+            throw Exception;
+        }
     }
-    if (cmd["cmd"] == "right") {
-        ld val = stold(cmd["val"].asString());
-        BotOperation bot("right", val);
-        bot.send_command();   
-    }
-    if (cmd["cmd"] == "forward") {
-        ld val = stold(cmd["val"].asString());
-        BotOperation bot("forward", val);
-        bot.send_command();   
-    }
-    if (cmd["cmd"] == "back") {
-        ld val = stold(cmd["val"].asString());
-        BotOperation bot("back", val);
-        bot.send_command();   
-    }
-    if (cmd["cmd"] == "stop") {
-        BotOperation bot;
-        bot.send_command();
-    }
-    // if (cmd["cmd"] == "auto") {
-    //     // WIP
-    // }
 };
 
 JsonHandler json;
