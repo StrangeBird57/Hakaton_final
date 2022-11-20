@@ -291,34 +291,6 @@ void Work::process() {
     }
 }
 
-pair<string, ld> temp_parser(string s) {
-    bool fl = 0;
-    vector<string> t;
-    string cmd = "";
-    for (int i = 0; i < s.size(); ++i) {
-        if (fl == 0) {
-            if (s[i] == ':') {
-                fl = 1;
-                i += 2;
-            }
-        }
-        else if (fl == 1) {
-            if (s[i] != 34) { cmd += s[i]; }
-            else {
-                fl = 0;
-                t.push_back(cmd);
-                cmd = "";
-            }
-        }
-    }
-    if (t.size() == 1) {
-        return { "stop", 0 };
-    }
-    else {
-        return { t[0], stold(t[1]) };
-    }
-}
-
 void InputHandler(string s) {
     s.erase(remove(s.begin(), s.end(), ' '), s.end());   
     cout << s << endl;
