@@ -267,7 +267,9 @@ void JsonHandler::input_handler(string s) {
         }
         if (cmd["cmd"] == "auto") {
             fl = 1;
+            json = cmd;
             Work w;
+            w.process();
         }
     } else {
         if (cmd["cmd"] == "auto") {
