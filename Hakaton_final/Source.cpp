@@ -342,35 +342,31 @@ void InputHandler(string s) {
         return;
     }
 
-    cout << cmd;
-    // BotOperation bot(p.first, stold(p.second));
-    // bot.send_command();
-    // cout << p.first << " " << p.second << endl;
-    // bool fl = 0;
-    // if (cmd["cmd"] == "left") {
-    //     ld val = stold(cmd["val"].asString());
-    //     BotOperation bot("left", val);
-    //     bot.send_command();   
-    // }
-    // if (cmd["cmd"] == "right") {
-    //     ld val = stold(cmd["val"].asString());
-    //     BotOperation bot("right", val);
-    //     bot.send_command();   
-    // }
-    // if (cmd["cmd"] == "forward") {
-    //     ld val = stold(cmd["val"].asString());
-    //     BotOperation bot("forward", val);
-    //     bot.send_command();   
-    // }
-    // if (cmd["cmd"] == "back") {
-    //     ld val = stold(cmd["val"].asString());
-    //     BotOperation bot("back", val);
-    //     bot.send_command();   
-    // }
-    // if (cmd["cmd"] == "stop") {
-    //     BotOperation bot;
-    //     bot.send_command();
-    // }
+    // cout << cmd;
+    if (cmd["cmd"] == "left") {
+        ld val = stold(cmd["val"].asString());
+        BotOperation bot("left", val);
+        bot.send_command();   
+    }
+    if (cmd["cmd"] == "right") {
+        ld val = stold(cmd["val"].asString());
+        BotOperation bot("right", val);
+        bot.send_command();   
+    }
+    if (cmd["cmd"] == "forward") {
+        ld val = stold(cmd["val"].asString());
+        BotOperation bot("forward", val);
+        bot.send_command();   
+    }
+    if (cmd["cmd"] == "back") {
+        ld val = stold(cmd["val"].asString());
+        BotOperation bot("back", val);
+        bot.send_command();   
+    }
+    if (cmd["cmd"] == "stop") {
+        BotOperation bot;
+        bot.send_command();
+    }
     // if (cmd["cmd"] == "auto") {
     //     // WIP
     // }
