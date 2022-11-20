@@ -76,7 +76,7 @@ ld Line::get_b() {
     return b;
 }
 
-ld get_angle(Line l1, Line l2){
+ld get_angle(Line l1, Line l2) {
     ld a1 = l1.get_a();
     ld a2 = l2.get_a();
     ld b1 = l1.get_b();
@@ -108,7 +108,7 @@ public:
     Point get_marker_4();
 };
 
-Markers::Markers(){
+Markers::Markers() {
     Point p(0, 0);
     marker_1 = p;
     marker_2 = p;
@@ -181,7 +181,7 @@ public:
     vector <Point> get_targets();
 };
 
-Workspace::Workspace(Json::Value file){
+Workspace::Workspace(Json::Value file) {
     cmd = file;
     cout << stold(cmd["markers_screen"][0]["x"].asString()) << endl;
     markers_screen = Markers(
@@ -198,7 +198,7 @@ Workspace::Workspace(Json::Value file){
         Point(stold(cmd["markers_floor"][3]["x"].asString()), stold(cmd["markers_floor"][3]["y"].asString()))
     );
 
-    for (auto elem : cmd["targets_screen"]){
+    for (auto elem : cmd["targets_screen"]) {
         targets_screen.push_back(Point(stod(elem["x"].asString()), stod(elem["y"].asString())));
     }
 
@@ -245,6 +245,7 @@ private:
     vector <Point> targets;
 public:
     Work();
+    vector <BotOperation> get_commands(Point start, Point finish, Point direction);
     void process();
 };
 
@@ -260,34 +261,37 @@ Work::Work() {
     targets = start.get_targets();
 }
 
-void Work::process() {
-    Line first(robot_start, robot_test), second(robot_start, targets[0]);
+vector <BotOperation> Work::get_commands(Point start, Point finish, Point direction) {
+    Line first(start, direction), second(start, finish);
     ld angle = get_angle(first, second);
     ld dist = get_dist(robot_start, targets[0]);
     ld time_rotate = calculate_time_by_angle(angle);
     ld time_move = calculate_time_by_dist(dist);
     BotOperation rotate("left", time_rotate), move("forward", time_move), back("back", time_move);
-    rotate.print_data();
-    move.print_data();
-    back.print_data();
+    vector <BotOperation> result;
+    result.push_back(rotate);
+    result.push_back(move);
+    result.push_back(back);
+}
+
+void Work::process() {
+    vector <BotOperation> comands = get_commands(robot_start, targets[0], robot_test);
+    for (int id = 0; id < comands.size(); ++id) {
+        comands[id].print_data();
+    }
     for (int i = 1; i < targets.size(); ++i) {
-        Line first(robot_start, targets[i - 1]), second(robot_start, targets[i]);
-        ld angle = get_angle(first, second);
-        ld dist = get_dist(robot_start, targets[i]);
-        ld time_rotate = calculate_time_by_angle(angle);
-        ld time_move = calculate_time_by_dist(dist);
-        BotOperation rotate("left", time_rotate), move("forward", time_move), back("back", time_move);
-        rotate.print_data();
-        move.print_data();
-        back.print_data();
+        vector <BotOperation> comands = get_commands(robot_start, targets[i], targets[i - 1]);
+        for (int id = 0; id < comands.size(); ++id) {
+            comands[id].print_data();
+        }
     }
 }
 
-pair<string, ld> temp_parser(string s){
+pair<string, ld> temp_parser(string s) {
     bool fl = 0;
     vector<string> t;
     string cmd = "";
-    for (int i = 0; i < s.size(); ++i){
+    for (int i = 0; i < s.size(); ++i) {
         if (fl == 0) {
             if (s[i] == ':') {
                 fl = 1;
@@ -295,7 +299,7 @@ pair<string, ld> temp_parser(string s){
             }
         }
         else if (fl == 1) {
-            if (s[i] != 34) {cmd += s[i];}
+            if (s[i] != 34) { cmd += s[i]; }
             else {
                 fl = 0;
                 t.push_back(cmd);
@@ -304,9 +308,10 @@ pair<string, ld> temp_parser(string s){
         }
     }
     if (t.size() == 1) {
-        return {"stop", 0};
-    } else {
-        return {t[0], stold(t[1])};
+        return { "stop", 0 };
+    }
+    else {
+        return { t[0], stold(t[1]) };
     }
 }
 
