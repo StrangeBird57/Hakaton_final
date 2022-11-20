@@ -21,6 +21,7 @@ public:
     Point();
     Point(ld new_x, ld new_y);
     Point operator=(Point p);
+    ld get_dist(Point p);
     ld get_x();
     ld get_y();
 };
@@ -41,6 +42,10 @@ Point Point::operator=(Point p) {
     return *this;
 }
 
+ld Point::get_dist(Point p) {
+    return pow((x - p.get_x()), 2) + pow((y - p.get_y()), 2);
+}
+
 ld Point::get_x() {
     return x;
 }
@@ -54,6 +59,7 @@ private:
     double a, b, c;
 public:
     Line(Point p1, Point p2);
+    ld get_angle(Line l);
     ld get_a();
     ld get_b();
 };
@@ -72,16 +78,10 @@ ld Line::get_b() {
     return b;
 }
 
-ld get_angle(Line l1, Line l2) {
-    ld a1 = l1.get_a();
-    ld a2 = l2.get_a();
-    ld b1 = l1.get_b();
-    ld b2 = l2.get_b();
-    return acos((a1 * b1 + a2 * b2) / ((hypot(a1, a2) * hypot(b1, b2))));
-}
-
-ld get_dist(Point a, Point b) {
-    return pow((a.get_x() - b.get_x()), 2) + pow((a.get_y() - b.get_y()), 2);
+ld Line::get_angle(Line l) {
+    ld a2 = l.get_a();
+    ld b2 = l.get_b();
+    return acos((a * b + a2 * b2) / ((hypot(a, a2) * hypot(b, b2))));
 }
 
 ld calculate_time_by_angle(ld angle) {
@@ -264,8 +264,8 @@ Work::Work() {
 
 vector <BotOperation> Work::get_commands(Point start, Point finish, Point direction) {
     Line first(start, direction), second(start, finish);
-    ld angle = get_angle(first, second);
-    ld dist = get_dist(robot_start, targets[0]);
+    ld angle = first.get_angle(second);
+    ld dist = robot_start.get_dist(targets[0]);
     ld time_rotate = calculate_time_by_angle(angle);
     ld time_move = calculate_time_by_dist(dist);
     BotOperation rotate("left", time_rotate), move("forward", time_move), back("back", time_move);
