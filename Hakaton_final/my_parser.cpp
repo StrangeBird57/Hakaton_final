@@ -246,7 +246,7 @@ void JsonHandler::input_handler(string s) {
         if (cmd["cmd"] == "auto") {
             json = cmd;
         } else {
-            throw Exception;
+            //throw Exception;
         }
     }
 };
@@ -262,7 +262,7 @@ private:
     ld dist_coefficient_x, dist_coefficient_y;
     vector <Point> targets_screen, targets_floor;
 public:
-    Workspace() {}
+    Workspace();
     void calculate_coefficiet();
     void calculate_robot_floor();
     void calculate_targets_floor();
