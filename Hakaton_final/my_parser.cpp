@@ -246,7 +246,7 @@ void JsonHandler::input_handler(string s) {
         if (cmd["cmd"] == "auto") {
             json = cmd;
         } else {
-            //throw Exception;
+            throw Exception;
         }
     }
 };
