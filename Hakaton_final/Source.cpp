@@ -1,7 +1,6 @@
 #define _CRT_SECURE_NO_WARNINGS
 
 #include <iostream>
-#include <fstream>
 #include <json/json.h>
 #include <iomanip>
 #include <cmath>
@@ -14,8 +13,6 @@ using namespace std;
 typedef long long ll;
 typedef long double ld;
 typedef vector <ll> vec;
-
-#define fixed_out(x) fixed << setprecision(x)
 
 class Point {
 private:
@@ -293,7 +290,6 @@ void Work::process() {
 
 void InputHandler(string s) {
     s.erase(remove(s.begin(), s.end(), ' '), s.end());   
-    cout << s << endl;
     Json::Value cmd;
     Json::CharReaderBuilder builder;
     Json::CharReader* reader = builder.newCharReader();
@@ -313,7 +309,6 @@ void InputHandler(string s) {
         return;
     }
 
-    // cout << cmd;
     if (cmd["cmd"] == "left") {
         ld val = stold(cmd["val"].asString());
         BotOperation bot("left", val);
