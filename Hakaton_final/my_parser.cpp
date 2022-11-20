@@ -164,6 +164,33 @@ void BotOperation::send_command() {
     }
 }
 
+class Work {
+private:
+    Point robot_start, robot_test;
+    vector <Point> targets;
+public:
+    Work();
+    vector <BotOperation> get_commands(Point start, Point finish, Point direction);
+    void process();
+};
+
+class Workspace {
+private:
+    Json::Value cmd;
+    Markers markers_screen, markers_floor;
+    Point robot_screen, robot_floor;
+    ld x_coefficient_1, x_coefficient_2, y_coefficient_1, y_coefficient_2;
+    ld dist_coefficient_x, dist_coefficient_y;
+    vector <Point> targets_screen, targets_floor;
+public:
+    Workspace();
+    void calculate_coefficiet();
+    void calculate_robot_floor();
+    void calculate_targets_floor();
+    Point get_robot();
+    vector <Point> get_targets();
+};
+
 class JsonHandler{
 private:
     Json::Value json;
@@ -246,29 +273,12 @@ void JsonHandler::input_handler(string s) {
         if (cmd["cmd"] == "auto") {
             json = cmd;
         } else {
-            throw Exception;
+            // throw Exception;
         }
     }
 };
 
 JsonHandler json;
-
-class Workspace {
-private:
-    Json::Value cmd;
-    Markers markers_screen, markers_floor;
-    Point robot_screen, robot_floor;
-    ld x_coefficient_1, x_coefficient_2, y_coefficient_1, y_coefficient_2;
-    ld dist_coefficient_x, dist_coefficient_y;
-    vector <Point> targets_screen, targets_floor;
-public:
-    Workspace();
-    void calculate_coefficiet();
-    void calculate_robot_floor();
-    void calculate_targets_floor();
-    Point get_robot();
-    vector <Point> get_targets();
-};
 
 Workspace::Workspace() {
     Json::Value file = json.get_json();
@@ -329,16 +339,6 @@ vector <Point> Workspace::get_targets() {
     return targets_floor;
 }
 
-class Work {
-private:
-    Point robot_start, robot_test;
-    vector <Point> targets;
-public:
-    Work();
-    vector <BotOperation> get_commands(Point start, Point finish, Point direction);
-    void process();
-};
-
 Work::Work() {
     Workspace start;
     BotOperation test_go("forward", 1);
@@ -381,7 +381,8 @@ void Work::process() {
 int main() {
     string s;
     getline(cin, s);
-    JsonHandler j;
-    j.input_handler(s);
+    json.input_handler(s);
+    getline(cin, s);
+    json.input_handler(s);
     return 0;
 }
