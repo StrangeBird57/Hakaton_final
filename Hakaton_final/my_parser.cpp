@@ -169,8 +169,6 @@ private:
     Json::Value json;
     bool fl;
 public:
-    JsonHandler(Json::Value);
-
     void set_json(Json::Value);
     Json::Value get_json();
     void set_fl(bool);
@@ -178,17 +176,12 @@ public:
     void input_handler(string);
 };
 
-JsonHandler::JsonHandler(Json::Value file) {
-    json = file;
-    fl = 0;
-}
-
-void JsonHandler::set_json(Json::Value file){
+void JsonHandler::set_json(Json::Value file) {
     json = file;
 }
 
-Json::Value JsonHandler::get_json(){
-    json = file;
+Json::Value JsonHandler::get_json() {
+    return json;
 }
 
 void JsonHandler::set_fl(bool flag) {
@@ -221,7 +214,6 @@ void JsonHandler::input_handler(string s) {
         return;
     }
 
-    // cout << cmd;
     if (cmd["cmd"] == "left") {
         ld val = stold(cmd["val"].asString());
         BotOperation bot("left", val);
@@ -379,6 +371,7 @@ void Work::process() {
 int main() {
     string s;
     getline(cin, s);
-    InputHandler(s);
+    JsonHandler j;
+    j.input_handler(s);
     return 0;
 }
