@@ -2,7 +2,7 @@
 
 #include <iostream>
 #include <fstream>
-#include <json/json.h>
+#include <json.h>
 #include <iomanip>
 #include <cmath>
 #include <algorithm>
@@ -168,6 +168,93 @@ void BotOperation::send_command() {
     }
 }
 
+class JsonHandler{
+private:
+    Json::Value json;
+    bool fl;
+public:
+    JsonHandler(Json::Value);
+
+    void set_json(Json::Value);
+    Json::Value get_json();
+    void set_fl(bool);
+    bool get_fl();
+    void input_handler(string);
+};
+
+JsonHandler::JsonHandler(Json::Value file) {
+    json = file;
+    fl = 0;
+}
+
+void JsonHandler::set_json(Json::Value file){
+    json = file;
+}
+
+Json::Value JsonHandler::get_json(){
+    json = file;
+}
+
+void JsonHandler::set_fl(bool flag) {
+    fl = flag;
+}
+
+bool JsonHandler::get_fl(){
+    return fl;
+}
+
+void JsonHandler::input_handler(string s) {
+    s.erase(remove(s.begin(), s.end(), ' '), s.end());   
+    cout << s << endl;
+    Json::Value cmd;
+    Json::CharReaderBuilder builder;
+    Json::CharReader* reader = builder.newCharReader();
+    string errors;
+
+    bool parsingSuccessful = reader->parse(
+        s.c_str(),
+        s.c_str() + s.size(),
+        &cmd,
+        &errors
+    );
+    delete reader;
+
+    if (!parsingSuccessful) {
+        cout << "Failed to parse the JSON, errors:" << endl;
+        cout << errors << endl;
+        return;
+    }
+
+    // cout << cmd;
+    if (cmd["cmd"] == "left") {
+        ld val = stold(cmd["val"].asString());
+        BotOperation bot("left", val);
+        bot.send_command();   
+    }
+    if (cmd["cmd"] == "right") {
+        ld val = stold(cmd["val"].asString());
+        BotOperation bot("right", val);
+        bot.send_command();   
+    }
+    if (cmd["cmd"] == "forward") {
+        ld val = stold(cmd["val"].asString());
+        BotOperation bot("forward", val);
+        bot.send_command();   
+    }
+    if (cmd["cmd"] == "back") {
+        ld val = stold(cmd["val"].asString());
+        BotOperation bot("back", val);
+        bot.send_command();   
+    }
+    if (cmd["cmd"] == "stop") {
+        BotOperation bot;
+        bot.send_command();
+    }
+    // if (cmd["cmd"] == "auto") {
+    //     // WIP
+    // }
+};
+
 class Workspace {
 private:
     Json::Value cmd;
@@ -319,58 +406,6 @@ pair<string, ld> temp_parser(string s) {
         return { t[0], stold(t[1]) };
     }
 }
-
-void InputHandler(string s) {
-    s.erase(remove(s.begin(), s.end(), ' '), s.end());   
-    cout << s << endl;
-    Json::Value cmd;
-    Json::CharReaderBuilder builder;
-    Json::CharReader* reader = builder.newCharReader();
-    string errors;
-
-    bool parsingSuccessful = reader->parse(
-        s.c_str(),
-        s.c_str() + s.size(),
-        &cmd,
-        &errors
-    );
-    delete reader;
-
-    if (!parsingSuccessful) {
-        cout << "Failed to parse the JSON, errors:" << endl;
-        cout << errors << endl;
-        return;
-    }
-
-    // cout << cmd;
-    if (cmd["cmd"] == "left") {
-        ld val = stold(cmd["val"].asString());
-        BotOperation bot("left", val);
-        bot.send_command();   
-    }
-    if (cmd["cmd"] == "right") {
-        ld val = stold(cmd["val"].asString());
-        BotOperation bot("right", val);
-        bot.send_command();   
-    }
-    if (cmd["cmd"] == "forward") {
-        ld val = stold(cmd["val"].asString());
-        BotOperation bot("forward", val);
-        bot.send_command();   
-    }
-    if (cmd["cmd"] == "back") {
-        ld val = stold(cmd["val"].asString());
-        BotOperation bot("back", val);
-        bot.send_command();   
-    }
-    if (cmd["cmd"] == "stop") {
-        BotOperation bot;
-        bot.send_command();
-    }
-    // if (cmd["cmd"] == "auto") {
-    //     // WIP
-    // }
-};
 
 int main() {
     string s;
