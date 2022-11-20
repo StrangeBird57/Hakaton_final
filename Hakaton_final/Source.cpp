@@ -146,7 +146,7 @@ private:
 public:
     BotOperation();
     BotOperation(string new_way, ld new_time);
-    void print_data();
+    void send_command();
 };
 
 BotOperation::BotOperation() {
@@ -159,7 +159,7 @@ BotOperation::BotOperation(string new_way, ld new_time) {
     time = new_time;
 }
 
-void BotOperation::print_data() {
+void BotOperation::send_command() {
     if (way == "stop") {
         cout << way << "\n";
     }
@@ -258,9 +258,9 @@ Work::Work() {
     Workspace start;
     BotOperation test_go("forward", 1);
     BotOperation test_back("back", 1);
-    test_go.print_data();
+    test_go.send_command();
     Workspace test;
-    test_back.print_data();
+    test_back.send_command();
     robot_start = start.get_robot();
     robot_test = test.get_robot();
     targets = start.get_targets();
@@ -280,14 +280,14 @@ vector <BotOperation> Work::get_commands(Point start, Point finish, Point direct
 }
 
 void Work::process() {
-    vector <BotOperation> commands = get_commands(robot_start, targets[0], robot_test);
-    for (int id = 0; id < commands.size(); ++id) {
-        commands[id].print_data();
+    vector <BotOperation> comands = get_commands(robot_start, targets[0], robot_test);
+    for (int id = 0; id < comands.size(); ++id) {
+        comands[id].send_command();
     }
     for (int i = 1; i < targets.size(); ++i) {
-        commands = get_commands(robot_start, targets[i], targets[i - 1]);
-        for (int id = 0; id < commands.size(); ++id) {
-            commands[id].print_data();
+        vector <BotOperation> comands = get_commands(robot_start, targets[i], targets[i - 1]);
+        for (int id = 0; id < comands.size(); ++id) {
+            comands[id].send_command();
         }
     }
 }
@@ -321,36 +321,55 @@ pair<string, ld> temp_parser(string s) {
 }
 
 void InputHandler(string s) {
-    // Json::Value cmd;
-    // cmd_file >> cmd;
-    pair<string, ld> p = temp_parser(s);
-    BotOperation bot(p.first, stold(p.second));
-    bot.print_data();
+    s.erase(remove(s.begin(), s.end(), ' '), s.end());   
+    cout << s << endl;
+    Json::Value cmd;
+    Json::CharReaderBuilder builder;
+    Json::CharReader* reader = builder.newCharReader();
+    string errors;
+
+    bool parsingSuccessful = reader->parse(
+        s.c_str(),
+        s.c_str() + s.size(),
+        &cmd,
+        &errors
+    );
+    delete reader;
+
+    if (!parsingSuccessful) {
+        cout << "Failed to parse the JSON, errors:" << endl;
+        cout << errors << endl;
+        return;
+    }
+
+    cout << cmd;
+    // BotOperation bot(p.first, stold(p.second));
+    // bot.send_command();
     // cout << p.first << " " << p.second << endl;
     // bool fl = 0;
     // if (cmd["cmd"] == "left") {
     //     ld val = stold(cmd["val"].asString());
     //     BotOperation bot("left", val);
-    //     bot.print_data();   
+    //     bot.send_command();   
     // }
     // if (cmd["cmd"] == "right") {
     //     ld val = stold(cmd["val"].asString());
     //     BotOperation bot("right", val);
-    //     bot.print_data();   
+    //     bot.send_command();   
     // }
     // if (cmd["cmd"] == "forward") {
     //     ld val = stold(cmd["val"].asString());
     //     BotOperation bot("forward", val);
-    //     bot.print_data();   
+    //     bot.send_command();   
     // }
     // if (cmd["cmd"] == "back") {
     //     ld val = stold(cmd["val"].asString());
     //     BotOperation bot("back", val);
-    //     bot.print_data();   
+    //     bot.send_command();   
     // }
     // if (cmd["cmd"] == "stop") {
     //     BotOperation bot;
-    //     bot.print_data();
+    //     bot.send_command();
     // }
     // if (cmd["cmd"] == "auto") {
     //     // WIP
@@ -358,6 +377,8 @@ void InputHandler(string s) {
 };
 
 int main() {
-    InputHandler();
+    string s;
+    getline(cin, s);
+    InputHandler(s);
     return 0;
 }
