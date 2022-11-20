@@ -273,6 +273,7 @@ vector <BotOperation> Work::get_commands(Point start, Point finish, Point direct
     result.push_back(rotate);
     result.push_back(move);
     result.push_back(back);
+    return result;
 }
 
 void Work::process() {
